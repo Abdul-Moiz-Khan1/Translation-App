@@ -15,10 +15,12 @@ import com.google.mlkit.nl.languageid.LanguageIdentifier
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
+import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 //    lateinit var lannn:LanguageIdentifier
+    private lateinit var Languages: MutableList<String>
     lateinit var return_langauge:String
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -26,12 +28,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         return_langauge = "en"
 
+        set_language_list()
+
         binding.button.setOnClickListener {
             val getsentence = findViewById<EditText>(R.id.sentence).text.toString()
             val detected_language = detect_Language(getsentence)
             Log.d("check lan" , detected_language)
+            val lang = "english"
             val options = TranslatorOptions.Builder()
-                .setSourceLanguage(TranslateLanguage.fromLanguageTag(detected_language).toString())
+                .setSourceLanguage(TranslateLanguage.THAI)
                 .setTargetLanguage(TranslateLanguage.ENGLISH)
                 .build()
             val englishGermanTranslator = Translation.getClient(options)
@@ -79,5 +84,67 @@ class MainActivity : AppCompatActivity() {
                 // ...
             }
         return return_langauge
+    }
+
+    private fun set_language_list() {
+        Languages.add("Afrikaans")
+        Languages.add("Arabic")
+        Languages.add("Belarusian")
+        Languages.add("Bulgarian")
+        Languages.add("Bengali")
+        Languages.add("Catalan")
+        Languages.add("Czech")
+        Languages.add("Welsh")
+        Languages.add("Danish")
+        Languages.add("German")
+        Languages.add("Greek")
+        Languages.add("English")
+        Languages.add("Esperanto")
+        Languages.add("Spanish")
+        Languages.add("Estonian")
+        Languages.add("Persian")
+        Languages.add("Finnish")
+        Languages.add("French")
+        Languages.add("Irish")
+        Languages.add("Galician")
+        Languages.add("Gujarati")
+        Languages.add("Hebrew")
+        Languages.add("Hindi")
+        Languages.add("Croatian")
+        Languages.add("Haitian")
+        Languages.add("Hungarian")
+        Languages.add("Indonesian")
+        Languages.add("Icelandic")
+        Languages.add("Italian")
+        Languages.add("Japanese")
+        Languages.add("Georgian")
+        Languages.add("Kannada")
+        Languages.add("Korean")
+        Languages.add("Lithuanian")
+        Languages.add("Latvian")
+        Languages.add("Macedonian")
+        Languages.add("Marathi")
+        Languages.add("Malay")
+        Languages.add("Maltese")
+        Languages.add("Dutch")
+        Languages.add("Norwegian")
+        Languages.add("Polish")
+        Languages.add("Portuguese")
+        Languages.add("Romanian")
+        Languages.add("Russian")
+        Languages.add("Slovak")
+        Languages.add("Slovenian")
+        Languages.add("Albanian")
+        Languages.add("Swedish")
+        Languages.add("Swahili")
+        Languages.add("Tamil")
+        Languages.add("Telugu")
+        Languages.add("Thai")
+        Languages.add("Tagalog")
+        Languages.add("Turkish")
+        Languages.add("Ukrainian")
+        Languages.add("Urdu")
+        Languages.add("Vietnamese")
+        Languages.add("Chinese")
     }
 }
