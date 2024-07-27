@@ -52,4 +52,7 @@ dependencies {
 
     implementation(libs.translate)
     implementation(libs.language.id)
+    implementation(libs.lottie)
+
+
 }

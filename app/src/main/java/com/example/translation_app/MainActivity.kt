@@ -41,16 +41,12 @@ class MainActivity : AppCompatActivity() {
                 .build()
             englishGermanTranslator.downloadModelIfNeeded(conditions)
                 .addOnSuccessListener {
-                    // Model downloaded successfully. Okay to start translating.
-                    // (Set a flag, unhide the translation UI, etc.)
                     englishGermanTranslator.translate(getsentence)
                         .addOnSuccessListener { translatedText ->
                             binding.translation.text = translatedText
                         }
                         .addOnFailureListener { exception ->
                             Log.e("Error", "smth smth", exception)
-                            // Error.
-                            // ...
                         }
                 }
                 .addOnFailureListener { exception ->
