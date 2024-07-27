@@ -18,10 +18,12 @@ import com.google.mlkit.nl.translate.TranslatorOptions
 import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
-//    lateinit var lannn:LanguageIdentifier
     private lateinit var Languages: MutableList<String>
+    private lateinit var language_codes:List<String>;
     lateinit var return_langauge:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -34,11 +36,12 @@ class MainActivity : AppCompatActivity() {
             val getsentence = findViewById<EditText>(R.id.sentence).text.toString()
             val detected_language = detect_Language(getsentence)
             Log.d("check lan" , detected_language)
-            val lang = "english"
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(TranslateLanguage.THAI)
                 .setTargetLanguage(TranslateLanguage.ENGLISH)
                 .build()
+            language_codes = TranslateLanguage.getAllLanguages()
+
             val englishGermanTranslator = Translation.getClient(options)
 
             var conditions = DownloadConditions.Builder()
@@ -70,6 +73,7 @@ class MainActivity : AppCompatActivity() {
                     Log.i("Error", "Can't identify language.")
                 } else {
                     Log.i("Detected", "Language: $languageCode")
+
                     val languageIdentifier = LanguageIdentification
                         .getClient(
                             LanguageIdentificationOptions.Builder()
@@ -146,5 +150,6 @@ class MainActivity : AppCompatActivity() {
         Languages.add("Urdu")
         Languages.add("Vietnamese")
         Languages.add("Chinese")
+        Languages.sort()
     }
 }
