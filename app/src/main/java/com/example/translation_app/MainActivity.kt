@@ -2,9 +2,10 @@ package com.example.translation_app
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import com.example.translation_app.databinding.ActivityMainBinding
 import com.google.mlkit.common.model.DownloadConditions
@@ -21,50 +22,88 @@ class MainActivity : AppCompatActivity() {
     private lateinit var Languages: MutableList<String>
     private lateinit var language_codes:List<String>
     lateinit var return_langauge:String
-    private lateinit var from_spinner:Spinner
-    private lateinit var to_spinner:Spinner
+    private lateinit var detected_language:String
+    private  lateinit var sentence:String
+    private lateinit var convert_to:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        return_langauge = "en"
-
-        Languages = ArrayList<String>()
-        language_codes = ArrayList<String>()
-
-        from_spinner = findViewById(R.id.fromM)
-        to_spinner= findViewById(R.id.to)
-
-        from_spinner.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item , Languages)
-        to_spinner.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item , Languages)
-
-//        from_spinner.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item , Languages)
-//        to_spinner.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item , Languages)
-
-
+        initialization()
         set_language_list()
+        set_spinners()
+        translate("auto_detect")
 
-        binding.button.setOnClickListener {
-            val getsentence = findViewById<EditText>(R.id.sentence).text.toString()
-            val detected_language = detect_Language(getsentence)
+    }
+
+    private fun set_spinners() {
+
+        val to_languages_list = Languages.subList(1 , Languages.size)
+        binding.fromSpinner.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item , Languages)
+        binding.toSpinner.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item ,to_languages_list)
+
+        //spinner that selects target language
+        binding.toSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val pos:Int = p2+1
+                convert_to = get_language_code(pos.toString())
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+
+        //spinner that selects detected language
+        binding.fromSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                Log.d("Language from spinner" , Languages.get(p2))
+                    if(p2 == 0){
+                        translate("auto_detect")
+                    }else{
+                        translate(p2.toString())
+                    }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+    }
+
+    private fun translate(mode:String) {
+
+        binding.translateBtn.setOnClickListener {
+
+            sentence = findViewById<EditText>(R.id.sentence).text.toString()
+
+            if(mode == "auto_detect"){
+                detected_language = detect_Language(sentence)
+            }else{
+                get_language_code(mode)
+            }
+
             Log.d("check lan" , detected_language)
+            val target_code = convert_to
 
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(TranslateLanguage.fromLanguageTag(detected_language).toString())
-                .setTargetLanguage(TranslateLanguage.ENGLISH)
+                .setTargetLanguage(TranslateLanguage.fromLanguageTag(target_code).toString())
                 .build()
-
-            language_codes = TranslateLanguage.getAllLanguages()
             val englishGermanTranslator = Translation.getClient(options)
 
             var conditions = DownloadConditions.Builder()
                 .requireWifi()
                 .build()
+
+
             englishGermanTranslator.downloadModelIfNeeded(conditions)
                 .addOnSuccessListener {
-                    englishGermanTranslator.translate(getsentence)
+                    englishGermanTranslator.translate(sentence)
                         .addOnSuccessListener { translatedText ->
                             binding.translation.text = translatedText
                         }
@@ -78,6 +117,15 @@ class MainActivity : AppCompatActivity() {
                     // ...
                 }
         }
+
+
+    }
+
+    private fun get_language_code(mode: String):String {
+        val position:Int = mode.toInt() - 1
+        val code = language_codes.get(position)
+        Log.d("language codes" , code.toString())
+        return code
     }
 
     private fun detect_Language(getsentence: String):String {
@@ -106,6 +154,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun set_language_list() {
+
+        language_codes = TranslateLanguage.getAllLanguages()
+
         Languages.add("Afrikaans")
         Languages.add("Arabic")
         Languages.add("Belarusian")
@@ -166,5 +217,16 @@ class MainActivity : AppCompatActivity() {
         Languages.add("Vietnamese")
         Languages.add("Chinese")
         Languages.sort()
+        Languages.add(0,"Auto Detect")
+    }
+
+    private fun initialization() {
+        return_langauge = "en"
+        convert_to = "en"
+
+        Languages = ArrayList<String>()
+        language_codes = ArrayList<String>()
+
+
     }
 }
