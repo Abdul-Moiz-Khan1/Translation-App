@@ -1,11 +1,14 @@
 package com.example.translation_app
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.translation_app.databinding.ActivityMainBinding
 import com.google.mlkit.common.model.DownloadConditions
@@ -35,7 +38,22 @@ class MainActivity : AppCompatActivity() {
         set_language_list()
         set_spinners()
         translate("auto_detect")
+        set_buttons()
 
+
+
+    }
+
+    private fun set_buttons() {
+        binding.copy.setOnClickListener{
+            val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("copied" ,binding.translation.text.toString())
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(this,"Copied", Toast.LENGTH_SHORT).show()
+        }
+        binding.eraseAll.setOnClickListener{
+            binding.sentence.setText("")
+        }
     }
 
     private fun set_spinners() {
@@ -48,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         binding.toSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 val pos:Int = p2+1
+                binding.language2.text = Languages[pos]
                 convert_to = get_language_code(pos.toString())
             }
 
@@ -61,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         binding.fromSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 Log.d("Language from spinner" , Languages.get(p2))
+                binding.language1.text = Languages[p2]
                     if(p2 == 0){
                         translate("auto_detect")
                     }else{

@@ -97,8 +97,11 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
@@ -158,16 +161,24 @@
                 android:id="@+id/erase_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/sentence"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/language1"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/cancel" />
+                app:layout_constraintVertical_bias="1.0"
+                android:src="@drawable/cancel" />
 
             <Button
                 android:id="@+id/translate_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/orange"
+                android:layout_width="134dp"
+                android:layout_height="47dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/button_background"
                 android:text="Translate"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -235,9 +246,12 @@
                 android:id="@+id/copy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/copy"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/copy" />
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
