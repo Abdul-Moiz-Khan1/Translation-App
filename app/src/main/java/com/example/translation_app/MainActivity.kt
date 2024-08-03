@@ -76,11 +76,12 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        //spinner that selects detected language
+        //spinner that selects detected languages
         binding.fromSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                Log.d("Language from spinner" , Languages.get(p2))
                 binding.language1.text = Languages[p2]
+                Log.d("Language from spinner" , Languages.get(p2))
+//                binding.language1.text = Languages[p2]
                     if(p2 == 0){
                         translate("auto_detect")
                     }else{
