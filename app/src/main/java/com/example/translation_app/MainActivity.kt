@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                //todos
+                //todos on nothing selected in the spinner
 
             }
 
